@@ -2,7 +2,7 @@
 
 #ask for user input and then create a parent directory(main_dir) with the user input as the name
 read -p "Enter your name:" user_name
-main_dir="submissions_reminder_$user_name"
+main_dir="submission_reminder_$user_name"
 mkdir -p $main_dir
 
 #create subdirectories(app, modules, assets, config) inside the parent directory(main_dir)
@@ -66,3 +66,17 @@ echo "Days remaining to submit: $DAYS_REMAINING days"
 echo "--------------------------------------------"
 
 check_submissions $submissions_file' > $main_dir/app/reminder.sh
+
+#if condition to check if reminder.sh is available in the app directory
+echo '
+if [ -f "./app/reminder.sh" ]; then
+./app/reminder.sh
+else
+echo "Error: reminder.sh not found in the app directory."
+exit 1
+fi
+' > $main_dir/startup.sh
+#give execution permission to all the files in the directories
+chmod +x $main_dir/modules/functions.sh
+chmod +x $main_dir/app/reminder.sh
+chmod +x $main_dir/startup.sh
